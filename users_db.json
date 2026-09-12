@@ -1,0 +1,74 @@
+{
+  "8558893620": {
+    "telegram_username": "Pratikx197",
+    "phone": "9084722241",
+    "encrypted_password": "ENC_M8BDvszSpYrVBDi8ioo=",
+    "country_code": "+91",
+    "connected": true,
+    "trade_amount": 50,
+    "trade_type": "PLUS",
+    "auto_enabled": true,
+    "runtime_mode": "LIVE",
+    "last_order_id": null,
+    "active_orders": [],
+    "logs": [
+      "[2026-09-12 13:49:16] Login Failed for '9084722241': Incorrect account or password on ZenQuant (`zenquantai.com`). Please double-check your registered phone/email and password.",
+      "[2026-09-12 13:49:36] Login Failed for '+919084722241': Incorrect account or password on ZenQuant (`zenquantai.com`). Please double-check your registered phone/email and password.",
+      "[2026-09-12 13:52:17] Logged in ZenQuant account successfully."
+    ],
+    "bot_order_ids": [],
+    "subscription_expiry": null
+  },
+  "5895803570": {
+    "telegram_username": "Piyux32",
+    "phone": "9975139468",
+    "encrypted_password": "ENC_IfVqmvaI8dCsalw=",
+    "country_code": "+91",
+    "connected": true,
+    "trade_amount": 50,
+    "trade_type": "PLUS",
+    "auto_enabled": true,
+    "runtime_mode": "LIVE",
+    "last_order_id": "ZQ-PLUS-SUCCESS",
+    "bot_order_ids": [],
+    "active_orders": [],
+    "logs": [
+      "[2026-09-12 13:59:27] Logged in ZenQuant account successfully.",
+      "[2026-09-12 14:02:26] 📱 [MANUAL INJECT] Injected $50.00 into PLUS (Order: ZQ-PLUS-SUCCESS)"
+    ],
+    "last_cycle_time": "2026-09-12 14:02:26",
+    "subscription_expiry": null
+  },
+  "6292521370": {
+    "telegram_username": "Soramusicx",
+    "phone": "",
+    "encrypted_password": "",
+    "country_code": "+91",
+    "connected": false,
+    "trade_amount": 50,
+    "trade_type": "PLUS",
+    "auto_enabled": false,
+    "runtime_mode": "LIVE",
+    "last_order_id": null,
+    "bot_order_ids": [],
+    "active_orders": [],
+    "subscription_expiry": null,
+    "logs": []
+  },
+  "7959186286": {
+    "telegram_username": "AlphaxP32",
+    "phone": "",
+    "encrypted_password": "",
+    "country_code": "+91",
+    "connected": false,
+    "trade_amount": 50,
+    "trade_type": "PLUS",
+    "auto_enabled": false,
+    "runtime_mode": "LIVE",
+    "last_order_id": null,
+    "bot_order_ids": [],
+    "active_orders": [],
+    "subscription_expiry": null,
+    "logs": []
+  }
+}
