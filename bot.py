@@ -16,7 +16,7 @@ from config import BOT_TOKEN, DEFAULT_TRADE_AMOUNT, DEFAULT_TRADE_TYPE, ADMIN_ID
 from db import (
     get_user, update_user, add_user_log, get_all_users,
     is_user_subscribed, grant_subscription, revoke_subscription,
-    get_global_settings, update_global_settings
+    get_global_settings, update_global_settings, find_user_by_query
 )
 from security import encrypt_password, decrypt_password
 from zenquant_api import ZenQuantClient
@@ -635,32 +635,73 @@ async def grant_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     if chat_id not in ADMIN_IDS:
         return
-    if len(context.args) < 2:
-        await update.effective_message.reply_text("Usage: `/grant <USER_ID> <DAYS>` (e.g. `/grant 8558893620 10`)", parse_mode="Markdown")
-        return
-    try:
-        target_uid = int(context.args[0])
-        days = int(context.args[1])
-        expiry_str = grant_subscription(target_uid, days)
-        
-        user = get_user(target_uid)
-        if user.get("connected"):
-            schedule_user_automation(target_uid, context.application)
-            
+
+    if not context.args:
+        users_db = get_all_users()
+        if not users_db:
+            await update.effective_message.reply_text("Koi user registered nahi hai database me.")
+            return
+
+        buttons = []
+        for cid_str, udata in users_db.items():
+            uid = int(cid_str)
+            un = udata.get("telegram_username") or udata.get("phone") or str(uid)
+            buttons.append([InlineKeyboardButton(f"👤 @{un} (`{uid}`)", callback_data=f"approve_pay_{uid}")])
+
         await update.effective_message.reply_text(
-            f"User `{target_uid}` ko **{days} Days** ka subscription grant ho gaya hai!\nExpires: `{expiry_str}`",
-            parse_mode="Markdown"
+            "**GRANT SUBSCRIPTION PLAN**\n═════════════════════════\nSelect user below to grant plan, OR type:\n`/grant @username` or `/grant @username 15`",
+            parse_mode="Markdown",
+            reply_markup=InlineKeyboardMarkup(buttons)
         )
+        return
+
+    query_str = context.args[0]
+    target_uid = find_user_by_query(query_str)
+
+    if not target_uid:
+        await update.effective_message.reply_text(f"❌ User `{query_str}` nahi mila database me. Correct @username, phone ya Telegram ID enter karein.", parse_mode="Markdown")
+        return
+
+    if len(context.args) >= 2:
         try:
-            await context.bot.send_message(
-                chat_id=target_uid,
-                text=f"**SUBSCRIPTION ACTIVATED!**\nAdmin ne aapka plan `{days} Days` ke liye activate kar diya hai! Expiry: `{expiry_str}`",
+            days = int(context.args[1])
+            expiry_str = grant_subscription(target_uid, days)
+            user = get_user(target_uid)
+            if user.get("connected"):
+                schedule_user_automation(target_uid, context.application)
+
+            await update.effective_message.reply_text(
+                f"✅ User `{target_uid}` ko **{days} Days** ka plan add kar diya gaya hai!\nExpires: `{expiry_str}`",
                 parse_mode="Markdown"
             )
-        except Exception:
+            try:
+                await context.bot.send_message(
+                    chat_id=target_uid,
+                    text=f"**SUBSCRIPTION ACTIVATED!**\nAdmin ne aapka plan `{days} Days` ke liye activate kar diya hai! Expiry: `{expiry_str}`",
+                    parse_mode="Markdown"
+                )
+            except Exception:
+                pass
+            return
+        except ValueError:
             pass
-    except ValueError:
-        await update.effective_message.reply_text("User ID aur Days numbers hone chahiye.")
+
+    user = get_user(target_uid)
+    uname = user.get("telegram_username") or str(target_uid)
+    keyboard = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("15 Days ($3)", callback_data=f"grant_plan_{target_uid}_15"),
+            InlineKeyboardButton("30 Days ($5)", callback_data=f"grant_plan_{target_uid}_30")
+        ],
+        [
+            InlineKeyboardButton("45 Days ($7)", callback_data=f"grant_plan_{target_uid}_45")
+        ]
+    ])
+    await update.effective_message.reply_text(
+        f"SELECT PLAN DURATION FOR @{uname} (`{target_uid}`):",
+        parse_mode="Markdown",
+        reply_markup=keyboard
+    )
 
 async def reject_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id

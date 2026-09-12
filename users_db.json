@@ -14,10 +14,11 @@
     "logs": [
       "[2026-09-12 13:49:16] Login Failed for '9084722241': Incorrect account or password on ZenQuant (`zenquantai.com`). Please double-check your registered phone/email and password.",
       "[2026-09-12 13:49:36] Login Failed for '+919084722241': Incorrect account or password on ZenQuant (`zenquantai.com`). Please double-check your registered phone/email and password.",
-      "[2026-09-12 13:52:17] Logged in ZenQuant account successfully."
+      "[2026-09-12 13:52:17] Logged in ZenQuant account successfully.",
+      "[2026-09-12 14:50:31] ⭐ Subscription granted/extended for 30 days. Expires: 2026-10-12 14:50:31"
     ],
     "bot_order_ids": [],
-    "subscription_expiry": null
+    "subscription_expiry": "2026-10-12 14:50:31"
   },
   "5895803570": {
     "telegram_username": "Piyux32",
@@ -57,10 +58,10 @@
   },
   "7959186286": {
     "telegram_username": "AlphaxP32",
-    "phone": "",
-    "encrypted_password": "",
+    "phone": "7058565792",
+    "encrypted_password": "ENC_AsNZo9eZ8tGlCw==",
     "country_code": "+91",
-    "connected": false,
+    "connected": true,
     "trade_amount": 50,
     "trade_type": "PLUS",
     "auto_enabled": false,
@@ -69,6 +70,8 @@
     "bot_order_ids": [],
     "active_orders": [],
     "subscription_expiry": null,
-    "logs": []
+    "logs": [
+      "[2026-09-12 14:43:45] Logged in ZenQuant account successfully."
+    ]
   }
 }

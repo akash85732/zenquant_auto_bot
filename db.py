@@ -82,6 +82,35 @@ def update_user(chat_id: int, updates: Dict[str, Any]) -> Dict[str, Any]:
 def get_all_users() -> Dict[str, Any]:
     return load_db()
 
+def find_user_by_query(query: str) -> Optional[int]:
+    clean_q = query.strip().lstrip("@").lower()
+    if not clean_q:
+        return None
+
+    users_db = get_all_users()
+    
+    # 1. Exact numeric Telegram Chat ID
+    if clean_q.isdigit():
+        uid = int(clean_q)
+        if str(uid) in users_db:
+            return uid
+            
+    # 2. Exact match on username or phone
+    for cid_str, udata in users_db.items():
+        uname = str(udata.get("telegram_username", "")).lstrip("@").lower()
+        phone = str(udata.get("phone", "")).lower()
+        if clean_q == uname or clean_q == phone:
+            return int(cid_str)
+            
+    # 3. Partial match on username
+    for cid_str, udata in users_db.items():
+        uname = str(udata.get("telegram_username", "")).lstrip("@").lower()
+        if clean_q in uname and len(clean_q) >= 3:
+            return int(cid_str)
+
+    return None
+
+
 def is_user_subscribed(chat_id: int) -> bool:
     if chat_id in ADMIN_IDS:
         return True
